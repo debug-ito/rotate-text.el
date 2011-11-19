@@ -168,7 +168,7 @@ text."
 (defvar rotate-text-last-offset nil)
 
 ;;;###autoload
-(defun rotate-text (arg)
+(defun rotate-text (arg &optional default-string)
   "Rotate the text at point."
   (interactive (list (if (consp current-prefix-arg)
                          -1
@@ -196,10 +196,11 @@ text."
                                  rotate-text-patterns))
           (when (setq match (rotate-text-match-at-point (car pattern)))
             (setq replacement (rotate-text-replacement (cdr pattern) match arg))
-            (return t)))
-        (error "Nothing to rotate"))
+            (return t))))
     
     (unless replacement
+      (when default-string
+        (insert default-string))
       (error "Nothing to rotate"))
 
     (unless (eq last-command this-command)
