@@ -219,12 +219,12 @@ text."
                       (match-end 0))))))
 
 ;;;###autoload
-(defun rotate-text-backward (arg)
+(defun rotate-text-backward (arg &optional default-string)
   "Rotate the text at point backwards."
   (interactive (list (if (consp current-prefix-arg)
                          -1
                        (prefix-numeric-value current-prefix-arg))))
-  (rotate-text (- arg)))
+  (rotate-text (- arg) default-string))
 
 (provide 'rotate-text)
 ;;; rotate-text.el ends here
