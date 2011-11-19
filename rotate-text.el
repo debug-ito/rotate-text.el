@@ -198,6 +198,9 @@ text."
             (setq replacement (rotate-text-replacement (cdr pattern) match arg))
             (return t)))
         (error "Nothing to rotate"))
+    
+    (unless replacement
+      (error "Nothing to rotate"))
 
     (unless (eq last-command this-command)
       (setq rotate-text-last-offset
