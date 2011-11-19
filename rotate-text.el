@@ -197,13 +197,15 @@ text."
           (when (setq match (rotate-text-match-at-point (car pattern)))
             (setq replacement (rotate-text-replacement (cdr pattern) match arg))
             (return t))))
-    
+
     (unless replacement
       (when default-string
-        (insert default-string))
+        (insert default-string)
+        (setq rotate-text-last-offset nil))
       (error "Nothing to rotate"))
 
-    (unless (eq last-command this-command)
+    (unless (and rotate-text-last-offset
+                 (eq last-command this-command))
       (setq rotate-text-last-offset
             (if (eq pos (match-end 0))
                 'end
