@@ -198,25 +198,27 @@ text."
             (setq replacement (rotate-text-replacement (cdr pattern) match arg))
             (return t))))
 
-    (unless replacement
-      (when default-string
-        (insert default-string)
-        (setq rotate-text-last-offset nil))
-      (error "Nothing to rotate"))
+    (if (not replacement)
+        (progn (unless default-string
+                 (error "Nothing to rotate"))
+               (insert default-string)
+               (setq rotate-text-last-offset nil))
+      
+      (progn (unless (and rotate-text-last-offset
+                          (eq last-command this-command))
+               (setq rotate-text-last-offset
+                     (if (eq pos (match-end 0))
+                         'end
+                       (- pos (match-beginning 0)))))
 
-    (unless (and rotate-text-last-offset
-                 (eq last-command this-command))
-      (setq rotate-text-last-offset
-            (if (eq pos (match-end 0))
-                'end
-              (- pos (match-beginning 0)))))
+             (replace-match replacement)
 
-    (replace-match replacement)
+             (goto-char (if (eq rotate-text-last-offset 'end)
+                            (match-end 0)
+                          (min (+ (match-beginning 0) rotate-text-last-offset)
+                               (match-end 0))))))))
 
-    (goto-char (if (eq rotate-text-last-offset 'end)
-                   (match-end 0)
-                 (min (+ (match-beginning 0) rotate-text-last-offset)
-                      (match-end 0))))))
+    
 
 ;;;###autoload
 (defun rotate-text-backward (arg &optional default-string)
