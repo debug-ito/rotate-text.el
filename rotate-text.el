@@ -169,7 +169,8 @@ text."
 
 ;;;###autoload
 (defun rotate-text (arg &optional default-string)
-  "Rotate the text at point."
+  "Rotate the text at point. If there is nothing to rotate at point and DEFAULT-STRING is non-nil,
+DEFAULT-STRING is inserted at point."
   (interactive (list (if (consp current-prefix-arg)
                          -1
                        (prefix-numeric-value current-prefix-arg))))
@@ -222,7 +223,8 @@ text."
 
 ;;;###autoload
 (defun rotate-text-backward (arg &optional default-string)
-  "Rotate the text at point backwards."
+  "Rotate the text at point backwards. If there is nothing to rotate at point and DEFAULT-STRING is non-nil,
+DEFAULT-STRING is inserted at point."
   (interactive (list (if (consp current-prefix-arg)
                          -1
                        (prefix-numeric-value current-prefix-arg))))
