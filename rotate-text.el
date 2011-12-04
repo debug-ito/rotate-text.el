@@ -168,9 +168,12 @@ text."
 (defvar rotate-text-last-offset nil)
 
 ;;;###autoload
-(defun rotate-text (arg &optional default-string)
+(defun rotate-text (arg &optional default-string com-symbols com-words com-patterns)
   "Rotate the text at point. If there is nothing to rotate at point and DEFAULT-STRING is non-nil,
-DEFAULT-STRING is inserted at point."
+DEFAULT-STRING is inserted at point.
+
+COM-SYMBOLS, COM-WORDS and COM-PATTERNS are per-command addition to `rotate-text-symbols',
+`rotate-text-words' and `rotate-text-patterns', respectively."
   (interactive (list (if (consp current-prefix-arg)
                          -1
                        (prefix-numeric-value current-prefix-arg))))
@@ -179,21 +182,21 @@ DEFAULT-STRING is inserted at point."
         match replacement)
     (or ;; symbols
         (when (setq match (rotate-text-symbol-at-point))
-          (dolist (symbols (append rotate-text-local-symbols
+          (dolist (symbols (append com-symbols rotate-text-local-symbols
                                    rotate-text-symbols))
             (when (setq replacement
                         (rotate-text-replacement symbols match arg))
               (return t))))
         ;; words
         (when (setq match (rotate-text-word-at-point))
-          (dolist (words (append rotate-text-local-words
+          (dolist (words (append com-words rotate-text-local-words
                                  rotate-text-words))
             (when (setq replacement
                         (rotate-text-replacement words (downcase match) arg))
               (setq replacement (rotate-text-match-case match replacement))
               (return t))))
         ;; regexp
-        (dolist (pattern (append rotate-text-local-patterns
+        (dolist (pattern (append com-patterns rotate-text-local-patterns
                                  rotate-text-patterns))
           (when (setq match (rotate-text-match-at-point (car pattern)))
             (setq replacement (rotate-text-replacement (cdr pattern) match arg))
@@ -205,30 +208,34 @@ DEFAULT-STRING is inserted at point."
                (insert default-string)
                (setq rotate-text-last-offset nil))
       
-      (progn (unless (and rotate-text-last-offset
-                          (eq last-command this-command))
-               (setq rotate-text-last-offset
-                     (if (eq pos (match-end 0))
-                         'end
-                       (- pos (match-beginning 0)))))
+      (progn
+        (unless (and rotate-text-last-offset
+                     (eq last-command this-command))
+          (setq rotate-text-last-offset
+                (if (eq pos (match-end 0))
+                    'end
+                  (- pos (match-beginning 0)))))
 
-             (replace-match replacement)
+        (replace-match replacement)
 
-             (goto-char (if (eq rotate-text-last-offset 'end)
-                            (match-end 0)
-                          (min (+ (match-beginning 0) rotate-text-last-offset)
-                               (match-end 0))))))))
+        (goto-char (if (eq rotate-text-last-offset 'end)
+                       (match-end 0)
+                     (min (+ (match-beginning 0) rotate-text-last-offset)
+                          (match-end 0))))))))
 
     
 
 ;;;###autoload
-(defun rotate-text-backward (arg &optional default-string)
+(defun rotate-text-backward (arg &optional default-string com-symbols com-words com-patterns)
   "Rotate the text at point backwards. If there is nothing to rotate at point and DEFAULT-STRING is non-nil,
-DEFAULT-STRING is inserted at point."
+DEFAULT-STRING is inserted at point.
+
+COM-SYMBOLS, COM-WORDS and COM-PATTERNS are per-command addition to `rotate-text-symbols',
+`rotate-text-words' and `rotate-text-patterns', respectively."
   (interactive (list (if (consp current-prefix-arg)
                          -1
                        (prefix-numeric-value current-prefix-arg))))
-  (rotate-text (- arg) default-string))
+  (rotate-text (- arg) default-string com-symbols com-words com-patterns))
 
 (provide 'rotate-text)
 ;;; rotate-text.el ends here
