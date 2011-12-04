@@ -216,7 +216,7 @@ COM-SYMBOLS, COM-WORDS and COM-PATTERNS are per-command addition to `rotate-text
                     'end
                   (- pos (match-beginning 0)))))
 
-        (replace-match replacement)
+        (replace-match replacement nil t)
 
         (goto-char (if (eq rotate-text-last-offset 'end)
                        (match-end 0)
