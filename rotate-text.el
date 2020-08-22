@@ -36,10 +36,10 @@
 ;; (autoload 'rotate-text "rotate-text" nil t)
 ;; (autoload 'rotate-text-backward "rotate-text" nil t)
 ;;
-;; Customize the variables `rotate-text-patterns', `rotate-text-symbols' and
-;; `rotate-text-words'.  You can make buffer-local additions in
-;; `rotate-text-local-patterns', `rotate-text-local-symbols' and
-;; `rotate-text-local-words'.
+;; Customize the variables `rotate-text-patterns', `rotate-text-symbols',
+;; `rotate-text-words' and `rotate-text-use-defined-casing'.  You can make
+;; buffer-local additions in `rotate-text-local-patterns',
+;; `rotate-text-local-symbols' and `rotate-text-local-words'.
 ;;
 ;; Use the commands `rotate-text' and `rotate-text-backward' to rotate the
 ;; text.
