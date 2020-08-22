@@ -90,6 +90,14 @@ text."
   :group 'rotate-text
   :type '(repeat (repeat :tag "Rotation group" (string :tag "Word"))))
 
+
+(defcustom rotate-text-use-defined-casing nil
+  "* Flag that determines whether `rotate-text' keeps casing of matched symbol.
+If set to true, the casing of word defined in `rotate-text-symbols' and
+`rotate-text-local-symbols' is used."
+  :group 'rotate-text
+  :type 'boolean)
+
 (defvar rotate-text-local-patterns nil
   "*Buffer local additions to `rotate-text-patterns'.")
 (make-variable-buffer-local 'rotate-text-local-patterns)
@@ -216,7 +224,7 @@ COM-SYMBOLS, COM-WORDS and COM-PATTERNS are per-command addition to `rotate-text
                     'end
                   (- pos (match-beginning 0)))))
 
-        (replace-match replacement nil t)
+        (replace-match replacement rotate-text-use-defined-casing t)
 
         (goto-char (if (eq rotate-text-last-offset 'end)
                        (match-end 0)
